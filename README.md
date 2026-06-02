@@ -24,7 +24,7 @@ Complete law firm management system for Odoo 18.
 ## Support
 
 - GitHub Issues for bug reports
-- Paid support available
+- Paid support available (contact@eanda.tech)
 
 ## Author
 
