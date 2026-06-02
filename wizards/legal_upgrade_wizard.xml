@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_legal_upgrade_wizard_form" model="ir.ui.view">
+        <field name="name">legal.upgrade.wizard.form</field>
+        <field name="model">legal.upgrade.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Passer à la version payante">
+                <div class="alert alert-info" style="background-color: #dbeafe; border: 1px solid #1e40af;">
+                    <i class="fa fa-info-circle"/> 
+                    <strong>Débloquez toutes les fonctionnalités!</strong>
+                    <p class="mt-2">La version payante vous permet d'accéder à:</p>
+                    <ul>
+                        <li>📊 Rapports avancés (PDF, Excel)</li>
+                        <li>👥 Portail client complet</li>
+                        <li>💰 Facturation et devis</li>
+                        <li>🔗 API REST</li>
+                        <li>🌍 Configuration multi-pays</li>
+                        <li>🛡️ GDPR complet</li>
+                    </ul>
+                </div>
+                
+                <group>
+                    <field name="version_type" widget="radio"/>
+                    <field name="company_name" required="1"/>
+                    <field name="contact_name" required="1"/>
+                    <field name="email" required="1"/>
+                    <field name="phone"/>
+                    <field name="company_size"/>
+                    <field name="message"/>
+                </group>
+                
+                <footer>
+                    <button name="action_buy_now" string="Acheter maintenant" type="object" class="btn-primary"/>
+                    <button name="action_request_quote" string="Demander un devis" type="object" class="btn-secondary"/>
+                    <button string="Annuler" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

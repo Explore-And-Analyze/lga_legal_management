@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_legal_settings_form" model="ir.ui.view">
+        <field name="name">legal.settings.form</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='general_settings']" position="inside">
+                <div class="col-12 col-lg-6 o_setting_box" id="legal_upgrade_settings">
+                    <div class="o_setting_left">
+                        <field name="legal_display_upgrade_banner"/>
+                    </div>
+                    <div class="o_setting_right">
+                        <label for="legal_display_upgrade_banner" string="Afficher la bannière d'upgrade"/>
+                        <div class="text-muted">
+                            Afficher une bannière pour encourager la mise à niveau vers la version payante.
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

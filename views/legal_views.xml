@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ==================== ACTIONS ==================== -->
+    
+    <!-- Action pour les dossiers -->
+    <record id="action_legal_case" model="ir.actions.act_window">
+        <field name="name">Dossiers</field>
+        <field name="res_model">legal.case</field>
+        <field name="view_mode">kanban,list,form,graph,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre premier dossier juridique
+            </p>
+        </field>
+    </record>
+
+    <!-- Action pour les audiences -->
+    <record id="action_legal_audience" model="ir.actions.act_window">
+        <field name="name">Audiences</field>
+        <field name="res_model">legal.audience</field>
+        <field name="view_mode">list,form,calendar</field>
+    </record>
+
+    <!-- Action pour les délais -->
+    <record id="action_legal_deadline" model="ir.actions.act_window">
+        <field name="name">Délais</field>
+        <field name="res_model">legal.deadline</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Action pour les feuilles de temps -->
+    <record id="action_legal_timesheet" model="ir.actions.act_window">
+        <field name="name">Feuilles de temps</field>
+        <field name="res_model">legal.timesheet</field>
+        <field name="view_mode">list,form,graph,pivot</field>
+    </record>
+
+    <!-- Action pour les documents -->
+    <record id="action_legal_document" model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">legal.document</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ==================== ACTIONS DE CONFIGURATION ==================== -->
+
+    <!-- Action pour les types de dossiers -->
+    <record id="action_legal_case_type" model="ir.actions.act_window">
+        <field name="name">Types de dossiers</field>
+        <field name="res_model">legal.case.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Action pour les étapes de dossier -->
+    <record id="action_legal_case_stage" model="ir.actions.act_window">
+        <field name="name">Étapes</field>
+        <field name="res_model">legal.case.stage</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Action pour les spécialisations -->
+    <record id="action_legal_specialization" model="ir.actions.act_window">
+        <field name="name">Spécialisations</field>
+        <field name="res_model">legal.specialization</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Action pour les tags de documents -->
+    <record id="action_legal_document_tag" model="ir.actions.act_window">
+        <field name="name">Tags documents</field>
+        <field name="res_model">legal.document.tag</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ==================== VUES POUR LES DOSSIERS ==================== -->
+
+    <record id="view_legal_case_list" model="ir.ui.view">
+        <field name="name">legal.case.list</field>
+        <field name="model">legal.case</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="client_id"/>
+                <field name="lead_lawyer_id"/>
+                <field name="case_type_id"/>
+                <field name="priority" widget="priority"/>
+                <field name="state" widget="badge"/>
+                <field name="deadline_date"/>
+                <field name="deadline_status" widget="badge"/>
+                <field name="opening_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_legal_case_form" model="ir.ui.view">
+        <field name="name">legal.case.form</field>
+        <field name="model">legal.case</field>
+        <field name="arch" type="xml">
+            <form string="Dossier Juridique">
+                <header>
+                    <button name="action_activate" string="Activer" type="object" class="btn-primary" invisible="state not in ['draft','pending']"/>
+                    <button name="action_suspend" string="Suspendre" type="object" confirm="Êtes-vous sûr de vouloir suspendre ce dossier ?" invisible="state != 'active'"/>
+                    <button name="action_close" string="Clôturer" type="object" confirm="Êtes-vous sûr de vouloir clôturer ce dossier ?" invisible="state not in ['active','suspended']"/>
+                    <button name="action_reopen" string="Réouvrir" type="object" invisible="state != 'closed'"/>
+                    <button name="action_archive" string="Archiver" type="object" confirm="Êtes-vous sûr de vouloir archiver ce dossier ?" invisible="state != 'closed'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,active,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_legal_audience)d" type="action" class="oe_stat_button" icon="fa-gavel"/>
+                        <button name="%(action_legal_deadline)d" type="action" class="oe_stat_button" icon="fa-clock-o"/>
+                        <button name="%(action_legal_document)d" type="action" class="oe_stat_button" icon="fa-file-pdf-o"/>
+                        <button name="%(action_legal_timesheet)d" type="action" class="oe_stat_button" icon="fa-hourglass-half"/>
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name" string="Référence"/>
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <label for="subject" string="Objet"/>
+                        <h2>
+                            <field name="subject" placeholder="Objet du dossier..."/>
+                        </h2>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="client_id" 
+                                    
+                                    options="{
+                                        'limit': 20,
+                                        'search_more': True,
+                                        'create': True,
+                                        'create_edit': True,
+                                        'no_create': False,
+                                        'always_reload': True
+                                    }" />
+                            <field name="lead_lawyer_id" 
+                                    widget="many2one_avatar_user"
+                                    options="{
+                                        'limit': 20,
+                                        'search_more': True,
+                                        'no_create': False
+                                    }"/>
+                            <field name="associate_lawyer_ids" 
+                                        widget="many2many_tags" 
+                                        context="{'default_is_lawyer': True, 'default_is_assistant': False}"
+                                        options="{'no_create': False}"/>
+                             <field name="assistant_ids" widget="many2many_tags"
+                                    context="{'default_is_assistant': True}"
+                                    options="{'no_create': False}"/>
+                            <field name="opponent_ids" 
+                                        widget="many2many_tags" 
+                                        context="{'default_is_opponent': True, 'default_is_client': False}"
+                                        options="{'no_create': False}"/>
+                            <field name="lead_partner_ids" 
+                                        widget="many2many_tags" 
+                                        context="{'default_is_lead_partner': True, 'default_is_client': False}"
+                                        options="{'no_create': False}"/>
+                        </group>
+                        <group>
+                            <field name="case_type_id"/>
+                            <field name="case_subtype"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="ref_client"/>
+                            <field name="jurisdiction"/>
+                            <field name="procedure_type"/>
+                            <field name="opening_date"/>
+                            <field name="deadline_date"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Juridique" name="Informations">
+                            <group>
+                                <field name="description" widget="html"/>
+                                <field name="facts" widget="html"/>
+                                <field name="claims" widget="html"/>
+                                <field name="legal_basis" widget="html"/>
+                                <field name="jurisprudence" widget="html"/>
+                                <field name="strategy" widget="html"/>
+                                <field name="notes" widget="html"/>
+                            </group>
+                        </page>
+
+                        <page string="Finance">
+                            <group>
+                                <group>
+                                    <field name="dispute_amount" widget="monetary"/>
+                                    <field name="estimated_fees" widget="monetary"/>
+                                    <field name="estimated_costs" widget="monetary"/>
+                                    <field name="billing_type"/>
+                                </group>
+                            </group>
+                            <separator string="Statistiques"/>
+                            <group>
+                                <group>
+                                    <field name="timesheet_total_amount" widget="monetary"/>
+                                </group>
+                                <group>
+                                    <field name="deadline_status" widget="badge"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Audiences">
+                            <field name="audience_ids">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="start_time"/>
+                                    <field name="audience_type"/>
+                                    <field name="court_id"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Délais">
+                            <field name="deadline_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="deadline_type"/>
+                                    <field name="deadline_date"/>
+                                    <field name="days_remaining"/>
+                                    <field name="priority" widget="priority"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Documents">
+                            <field name="document_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="document_type"/>
+                                    <field name="document_date"/>
+                                    <field name="author"/>
+                                    <field name="tag_ids" widget="many2many_tags"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_legal_case_kanban" model="ir.ui.view">
+        <field name="name">legal.case.kanban</field>
+        <field name="model">legal.case</field>
+        <field name="arch" type="xml">
+            <kanban class="o_legal_kanban">
+                <field name="name"/>
+                <field name="client_id"/>
+                <field name="lead_lawyer_id"/>
+                <field name="subject"/>
+                <field name="priority"/>
+                <field name="deadline_status"/>
+                <field name="state"/>
+                <field name="days_until_deadline"/>
+                <field name="audience_count"/>
+                <field name="deadline_count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                    <span t-if="record.priority.raw_value == '3' or record.priority.raw_value == '4'" class="fa fa-exclamation-triangle text-warning" title="Priorité Haute"/>
+                                </div>
+                                <field name="client_id" widget="many2one_avatar"/>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div class="text-muted o_kanban_record_subtitle">
+                                    <field name="subject"/>
+                                </div>
+                                <field name="lead_lawyer_id" widget="many2one_avatar_user"/>
+                                <div class="o_kanban_tags_section">
+                                    <span t-if="record.deadline_status.raw_value == 'overdue'" class="badge bg-danger">DÉPASSÉ</span>
+                                    <span t-if="record.deadline_status.raw_value == 'urgent'" class="badge bg-warning">URGENT</span>
+                                    <span t-if="record.deadline_status.raw_value == 'warning'" class="badge bg-info">PROCHE</span>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="state" widget="badge"/>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <span class="fa fa-gavel" title="Audiences"/> <field name="audience_count"/>
+                                    <span class="fa fa-clock-o ms-2" title="Délais"/> <field name="deadline_count"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_legal_case_graph" model="ir.ui.view">
+        <field name="name">legal.case.graph</field>
+        <field name="model">legal.case</field>
+        <field name="arch" type="xml">
+            <graph type="bar">
+                <field name="case_type_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="id" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_legal_case_pivot" model="ir.ui.view">
+        <field name="name">legal.case.pivot</field>
+        <field name="model">legal.case</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="case_type_id" type="row"/>
+                <field name="lead_lawyer_id" type="col"/>
+                <field name="dispute_amount" type="measure"/>
+                <field name="estimated_fees" type="measure"/>
+                <field name="actual_fees" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- ==================== VUES POUR LES AUDIENCES ==================== -->
+    
+    <record id="view_legal_audience_list" model="ir.ui.view">
+        <field name="name">legal.audience.list</field>
+        <field name="model">legal.audience</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="date"/>
+                <field name="start_time"/>
+                <field name="case_id"/>
+                <field name="audience_type"/>
+                <field name="court_id"/>
+                <field name="judge_name"/>
+                <field name="state" widget="badge"/>
+                <field name="is_today" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_legal_audience_form" model="ir.ui.view">
+        <field name="name">legal.audience.form</field>
+        <field name="model">legal.audience</field>
+        <field name="arch" type="xml">
+            <form string="Audience">
+                <header>
+                    <button name="action_confirm" string="Confirmer" type="object" invisible="state != 'scheduled'"/>
+                    <button name="action_start" string="Démarrer" type="object" invisible="state != 'confirmed'"/>
+                    <button name="action_held" string="Tenue" type="object" invisible="state != 'in_progress'"/>
+                    <button name="action_postpone" string="Reporter" type="object" invisible="state not in ['scheduled','confirmed']"/>
+                    <button name="action_cancel" string="Annuler" type="object" confirm="Êtes-vous sûr de vouloir annuler cette audience ?" invisible="state not in ['scheduled','confirmed']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="scheduled,confirmed,in_progress,held"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="case_id"/>
+                            <field name="audience_type"/>
+                            <field name="audience_subtype"/>
+                            <field name="purpose"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="start_time"/>
+                            <field name="end_time"/>
+                            <field name="duration_hours" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lieu">
+                            <group>
+                                <group>
+                                    <field name="court_id"/>
+                                    <field name="courtroom"/>
+                                    <field name="location_details"/>
+                                </group>
+                                <group>
+                                    <field name="judge_name"/>
+                                    <field name="clerk_name"/>
+                                    <field name="prosecutor_name"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Participants">
+                            <group>
+                                <group>
+                                    <field name="lawyer_ids" 
+                                        widget="many2many_tags" 
+                                        context="{'default_is_lawyer': True, 'default_is_assistant': False}"
+                                        options="{'no_create': False}"/>
+                                    <field name="client_ids" 
+                                            widget="many2many_tags" 
+                                            context="{'default_is_client': True}"
+                                            options="{'no_create': False, 'create_name_field': 'name'}"/>
+                                </group>
+                                <group>
+                                    <field name="opponent_lawyer_ids" 
+                                        widget="many2many_tags" 
+                                        context="{'default_is_lawyer': True, 'default_is_assistant': False}"
+                                        options="{'no_create': False}"/>
+                                    <field name="other_participants"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Compte-rendu">
+                            <field name="report" widget="html"/>
+                            <field name="decision" widget="html"/>
+                            <field name="next_steps" widget="html"/>
+                            <field name="notes"/>
+                        </page>
+                        <page string="Documents">
+                            <field name="document_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_legal_audience_calendar" model="ir.ui.view">
+        <field name="name">legal.audience.calendar</field>
+        <field name="model">legal.audience</field>
+        <field name="arch" type="xml">
+            <calendar date_start="date" string="Audiences" color="audience_type">
+                <field name="case_id"/>
+                <field name="audience_type"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- ==================== VUES POUR LES DÉLAIS ==================== -->
+    
+    <record id="view_legal_deadline_list" model="ir.ui.view">
+        <field name="name">legal.deadline.list</field>
+        <field name="model">legal.deadline</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="case_id"/>
+                <field name="deadline_type"/>
+                <field name="deadline_date"/>
+                <field name="days_remaining"/>
+                <field name="priority" widget="priority"/>
+                <field name="responsible_id"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_legal_deadline_form" model="ir.ui.view">
+        <field name="name">legal.deadline.form</field>
+        <field name="model">legal.deadline</field>
+        <field name="arch" type="xml">
+            <form string="Délai">
+                <header>
+                    <button name="action_activate" string="Activer" type="object" invisible="state != 'draft'"/>
+                    <button name="action_complete" string="Marquer réalisé" type="object" invisible="state != 'active'"/>
+                    <button name="action_extend" string="Prolonger" type="object" invisible="state != 'active'"/>
+                    <button name="action_cancel" string="Annuler" type="object" confirm="Êtes-vous sûr ?" invisible="state not in ['draft','active']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="case_id"/>
+                            <field name="deadline_type"/>
+                            <field name="deadline_category"/>
+                            <field name="priority" widget="priority"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="deadline_date"/>
+                            <field name="completion_date"/>
+                            <field name="responsible_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                            <field name="consequences" widget="html"/>
+                            <field name="required_action" widget="html"/>
+                            <field name="legal_text"/>
+                        </page>
+                        <page string="Progression">
+                            <group>
+                                <field name="days_remaining" widget="statinfo"/>
+                                <field name="progress_percentage" widget="progressbar"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== VUES POUR LES FEUILLES DE TEMPS ==================== -->
+    
+    <record id="view_legal_timesheet_list" model="ir.ui.view">
+        <field name="name">legal.timesheet.list</field>
+        <field name="model">legal.timesheet</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="date"/>
+                <field name="case_id"/>
+                <field name="lawyer_id"/>
+                <field name="activity_type"/>
+                <field name="duration_hours"/>
+                <field name="cost_amount" sum="Total"/>
+                <field name="billable"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_legal_timesheet_form" model="ir.ui.view">
+        <field name="name">legal.timesheet.form</field>
+        <field name="model">legal.timesheet</field>
+        <field name="arch" type="xml">
+            <form string="Feuille de temps">
+                <header>
+                    <button name="action_submit" string="Soumettre" type="object" invisible="state != 'draft'"/>
+                    <button name="action_validate" string="Valider" type="object" invisible="state != 'submitted'"/>
+                    <button name="action_reject" string="Rejeter" type="object" invisible="state != 'submitted'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,validated,invoiced"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="case_id"/>
+                            <field name="lawyer_id"/>
+                            <field name="activity_type"/>
+                            <field name="activity_subtype"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="start_time"/>
+                            <field name="end_time"/>
+                            <field name="duration_hours" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="detailed_description" widget="html"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="billable"/>
+                            <field name="cost_amount" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="rejection_reason" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== VUES POUR LES DOCUMENTS ==================== -->
+    
+    <record id="view_legal_document_list" model="ir.ui.view">
+        <field name="name">legal.document.list</field>
+        <field name="model">legal.document</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="case_id"/>
+                <field name="document_type"/>
+                <field name="document_date"/>
+                <field name="author"/>
+                <field name="file_name" string="Fichier"/>
+                <field name="file_size" widget="integer"/>
+                <field name="tag_ids" widget="many2many_tags"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_legal_document_form" model="ir.ui.view">
+        <field name="name">legal.document.form</field>
+        <field name="model">legal.document</field>
+        <field name="arch" type="xml">
+            <form string="Document">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="case_id"/>
+                            <field name="audience_id"/>
+                            <field name="document_type"/>
+                            <field name="document_category"/>
+                        </group>
+                        <group>
+                            <field name="document_date"/>
+                            <field name="document_number"/>
+                            <field name="author"/>
+                            <field name="language"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Fichier">
+                            <group>
+                                <field name="file_data" widget="binary" filename="file_name"/>
+                                <field name="file_name" invisible="1"/>
+                                <field name="file_size" readonly="1" widget="integer"/>
+                                <field name="file_type" readonly="1"/>
+                            </group>
+                            <group>
+                                <button name="action_download" string="Télécharger" type="object" class="btn-primary"
+                                        invisible="file_data == False"/>
+                            </group>
+                        </page>
+                        <page string="Métadonnées">
+                            <group>
+                                <field name="description"/>
+                                <field name="keywords"/>
+                                <field name="source"/>
+                                <field name="notes"/>
+                            </group>
+                        </page>
+                        <page string="Classification">
+                            <group>
+                                <group>
+                                    <field name="confidentiality"/>
+                                    <field name="tag_ids" widget="many2many_tags"/>
+                                </group>
+                                <group>
+                                    <field name="version" widget="float" />
+                                    <field name="is_original"/>
+                                    <field name="original_id"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Texte extrait">
+                            <field name="extracted_text" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ==================== ACTION TABLEAU DE BORD ==================== -->
+
+    <!-- Action pour le tableau de bord -->
+    <record id="action_legal_dashboard" model="ir.actions.act_window">
+        <field name="name">Tableau de bord</field>
+        <field name="res_model">legal.case</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_id" ref="view_legal_case_kanban"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Bienvenue dans votre espace juridique
+            </p>
+        </field>
+        <field name="groups_id" eval="[(4, ref('group_legal_user')), (4, ref('group_legal_manager'))]"/>
+    </record>
+</odoo>

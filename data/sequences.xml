@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Séquence pour les dossiers -->
+        <record id="seq_legal_case" model="ir.sequence">
+            <field name="name">Dossier Juridique</field>
+            <field name="code">legal.case</field>
+            <field name="prefix">DOS/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Séquence pour les audiences -->
+        <record id="seq_legal_audience" model="ir.sequence">
+            <field name="name">Audience</field>
+            <field name="code">legal.audience</field>
+            <field name="prefix">AUD/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Séquence pour les délais -->
+        <record id="seq_legal_deadline" model="ir.sequence">
+            <field name="name">Délai</field>
+            <field name="code">legal.deadline</field>
+            <field name="prefix">DEL/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Séquence pour les documents -->
+        <record id="seq_legal_document" model="ir.sequence">
+            <field name="name">Document</field>
+            <field name="code">legal.document</field>
+            <field name="prefix">DOC/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

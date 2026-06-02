@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu principal -->
+    <menuitem 
+        id="menu_legal_root" 
+        name="Legal Management" 
+        web_icon="lga_legal_management_community,static/description/icon.png"
+        groups="group_legal_user,group_legal_manager"
+        sequence="10"/>
+
+    <menuitem 
+        id="menu_legal_dashboard" 
+        name="Tableau de bord" 
+        parent="menu_legal_root" 
+        sequence="5" 
+        action="action_legal_dashboard"/>
+
+    <!-- Menu Dossiers -->
+    <menuitem id="menu_legal_cases" name="Dossiers" parent="menu_legal_root" sequence="10" action="action_legal_case"/>
+
+    <!-- Menu Audiences -->
+    <menuitem id="menu_legal_audiences" name="Audiences" parent="menu_legal_root" sequence="20" action="action_legal_audience"/>
+
+    <!-- Menu Délais -->
+    <menuitem id="menu_legal_deadlines" name="Délais" parent="menu_legal_root" sequence="30" action="action_legal_deadline"/>
+
+    <!-- Menu Temps -->
+    <menuitem id="menu_legal_timesheets" name="Temps &amp; Honoraires" parent="menu_legal_root" sequence="40" action="action_legal_timesheet"/>
+
+    <!-- Menu Documents -->
+    <menuitem id="menu_legal_documents" name="Documents" parent="menu_legal_root" sequence="50" action="action_legal_document"/>
+</odoo>

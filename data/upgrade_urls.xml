@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- URLs de mise à niveau -->
+        <record id="upgrade_url_appstore" model="ir.config_parameter">
+            <field name="key">legal.upgrade.url.basic</field>
+            <field name="value">https://eanda.tech/odoo/lga/basic</field>
+        </record>
+        
+        <record id="upgrade_url_enterprise" model="ir.config_parameter">
+            <field name="key">legal.upgrade.url.enterprise</field>
+            <field name="value">https://eanda.tech/odoo/lga/enterprise</field>
+        </record>
+        
+        <record id="upgrade_contact_email" model="ir.config_parameter">
+            <field name="key">legal.upgrade.contact.email</field>
+            <field name="value">contact@eanda.tech</field>
+        </record>
+        
+        <record id="upgrade_demo_url" model="ir.config_parameter">
+            <field name="key">legal.upgrade.demo.url</field>
+            <field name="value">https://demo.eanda.tech/odoo/lga</field>
+        </record>
+    </data>
+</odoo>

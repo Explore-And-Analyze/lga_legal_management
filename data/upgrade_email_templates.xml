@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_upgrade_request" model="mail.template">
+            <field name="name">Demande d'upgrade - Version payante</field>
+            <field name="model_id" ref="model_legal_upgrade_wizard"/>
+            <field name="subject">Nouvelle demande d'upgrade - ${object.company_name}</field>
+            <field name="email_from">${object.email}</field>
+            <field name="email_to">contact@eanda.tech</field>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; max-width: 600px;">
+                    <h3>Nouvelle demande d'upgrade</h3>
+                    
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding: 8px; background-color: #f3f4f6;"><strong>Cabinet:</strong></td>
+                            <td style="padding: 8px;">${object.company_name}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; background-color: #f3f4f6;"><strong>Contact:</strong></td>
+                            <td style="padding: 8px;">${object.contact_name}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; background-color: #f3f4f6;"><strong>Email:</strong></td>
+                            <td style="padding: 8px;">${object.email}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; background-color: #f3f4f6;"><strong>Téléphone:</strong></td>
+                            <td style="padding: 8px;">${object.phone or 'Non renseigné'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; background-color: #f3f4f6;"><strong>Version souhaitée:</strong></td>
+                            <td style="padding: 8px;">
+                                <t t-if="object.version_type == 'appstore'">App Store Edition (€299/an)</t>
+                                <t t-else="">Enterprise Edition (sur devis)</t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; background-color: #f3f4f6;"><strong>Taille du cabinet:</strong></td>
+                            <td style="padding: 8px;">${object.company_size}</td>
+                        </tr>
+                    </table>
+                    
+                    <div style="margin-top: 20px; padding: 12px; background-color: #fef3c7; border-left: 4px solid #f59e0b;">
+                        <strong>Message:</strong><br/>
+                        ${object.message or 'Aucun message spécifique'}
+                    </div>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Legal Case Management - Documentation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #1e40af;
+        }
+        .feature {
+            background: #f3f4f6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .lang-switch {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .lang-switch a {
+            margin: 0 5px;
+            text-decoration: none;
+            color: #1e40af;
+        }
+        code {
+            background: #e5e7eb;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-switch">
+        <a href="#" onclick="showLang('en')">English</a> |
+        <a href="#" onclick="showLang('fr')">Français</a> |
+        <a href="#" onclick="showLang('es')">Español</a>
+    </div>
+    
+    <div id="content-en" class="lang-content">
+        <h1>Legal Case Management Module</h1>
+        <p>A comprehensive legal case management solution for law firms.</p>
+        
+        <h2>Key Features</h2>
+        <div class="feature">
+            <h3>📁 Case Management</h3>
+            <p>Complete management of legal cases with custom fields for different jurisdictions.</p>
+            <img src="screenshots/portal.png" class="img-fluid">
+        </div>
+        <div class="feature">
+            <h3>⚖️ Multi-Jurisdiction Support</h3>
+            <p>Support for Civil Law, Common Law, and Mixed legal systems.</p>
+        </div>
+        <div class="feature">
+            <h3>🌍 International Compliance</h3>
+            <p>GDPR, AML, and international sanctions compliance.</p>
+        </div>
+        <div class="feature">
+            <h3>📅 Deadlines & Calendars</h3>
+            <p>Automatic deadline calculation based on legal system.</p>
+        </div>
+        <div class="feature">
+            <h3>📄 Document Management</h3>
+            <p>Secure document storage with version control.</p>
+        </div>
+        
+        <h2>Installation</h2>
+        <p>1. Add the module to your addons path</p>
+        <p>2. Update the module list</p>
+        <p>3. Install the module from Apps menu</p>
+        
+        <h2>Configuration</h2>
+        <p>1. Configure legal jurisdictions in Configuration > Legal > Jurisdictions</p>
+        <p>2. Set up court information</p>
+        <p>3. Define procedure types</p>
+    </div>
+    
+    <div id="content-fr" class="lang-content" style="display:none">
+        <h1>Module de Gestion Juridique</h1>
+        <p>Une solution complète de gestion de cabinet d'avocats.</p>
+        
+        <h2>Fonctionnalités principales</h2>
+        <div class="feature">
+            <h3>📁 Gestion des dossiers</h3>
+            <p>Gestion complète des dossiers juridiques avec champs personnalisés.</p>
+        </div>
+        <div class="feature">
+            <h3>⚖️ Support multi-juridiction</h3>
+            <p>Support pour les systèmes de droit civil, common law et mixtes.</p>
+        </div>
+        <div class="feature">
+            <h3>🌍 Conformité internationale</h3>
+            <p>Conformité RGPD, LCB-FT et sanctions internationales.</p>
+        </div>
+        <div class="feature">
+            <h3>📅 Délais et calendriers</h3>
+            <p>Calcul automatique des délais selon le système juridique.</p>
+        </div>
+        <div class="feature">
+            <h3>📄 Gestion documentaire</h3>
+            <p>Stockage sécurisé des documents avec contrôle de version.</p>
+        </div>
+        
+        <h2>Installation</h2>
+        <p>1. Ajouter le module au chemin des addons</p>
+        <p>2. Mettre à jour la liste des modules</p>
+        <p>3. Installer le module depuis le menu Applications</p>
+        
+        <h2>Configuration</h2>
+        <p>1. Configurer les juridictions dans Configuration > Juridique > Juridictions</p>
+        <p>2. Configurer les informations des tribunaux</p>
+        <p>3. Définir les types de procédure</p>
+    </div>
+    
+    <div id="content-es" class="lang-content" style="display:none">
+        <h1>Módulo de Gestión Legal</h1>
+        <p>Una solución completa para la gestión de bufetes de abogados.</p>
+        
+        <h2>Características principales</h2>
+        <div class="feature">
+            <h3>📁 Gestión de casos</h3>
+            <p>Gestión completa de casos legales con campos personalizados.</p>
+
+        </div>
+        <div class="feature">
+            <h3>⚖️ Soporte multi-jurisdiccional</h3>
+            <p>Soporte para sistemas de Derecho Civil, Common Law y mixtos.</p>
+        </div>
+        <div class="feature">
+            <h3>🌍 Cumplimiento internacional</h3>
+            <p>Cumplimiento GDPR, AML y sanciones internacionales.</p>
+        </div>
+        <div class="feature">
+            <h3>📅 Plazos y calendarios</h3>
+            <p>Cálculo automático de plazos según el sistema legal.</p>
+        </div>
+        
+        <h2>Instalación</h2>
+        <p>1. Añadir el módulo a la ruta de addons</p>
+        <p>2. Actualizar la lista de módulos</p>
+        <p>3. Instalar el módulo desde el menú Aplicaciones</p>
+    </div>
+    
+    <script>
+        function showLang(lang) {
+            document.querySelectorAll('.lang-content').forEach(el => el.style.display = 'none');
+            document.getElementById(`content-${lang}`).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
